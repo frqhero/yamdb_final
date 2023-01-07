@@ -5,13 +5,13 @@ class CustomPagination(pagination.PageNumberPagination):
     pass
 
 
-class Paginator_page_size_2(CustomPagination):
+class PaginatorPageSize2(CustomPagination):
     page_size = 2
 
 
-class Paginator_page_size_3(CustomPagination):
+class PaginatorPageSize3(CustomPagination):
     page_size = 3
 
 
-class Paginator_page_size_4(CustomPagination):
+class PaginatorPageSize4(CustomPagination):
     page_size = 4

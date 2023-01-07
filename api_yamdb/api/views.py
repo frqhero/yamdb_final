@@ -1,41 +1,34 @@
 import random
 
 from django.core.mail import EmailMessage
-from django.shortcuts import get_object_or_404
-from django.db.models import IntegerField, Avg
+from django.db.models import Avg, IntegerField
 from django.db.models.functions import Cast
-from rest_framework import permissions, status, viewsets, mixins, filters
+from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters1
+from rest_framework import filters, mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken
-from django_filters import rest_framework as filters1
+from reviews.models import Category, Genre, Review, Title, User
 
-from reviews.models import Category, Genre, Title, User, Review
-from .permissions import (AdminOnlyPermission,
-                          AdminOrReadOnlyPermission,
-                          IsOwnerOrReadOnlyOrOfficial)
-from .serializers import (CategorySerializer,
-                          GenreSerializer,
-                          TokenSerializer,
-                          ForNotAdminSerializer,
-                          TitleReadSerializer,
-                          TitleWriteSerializer,
-                          SignUpSerializer,
-                          UserSerializer,
-                          ReviewSerializer,
-                          CommentSerializer)
-from .paginations import (Paginator_page_size_2,
-                          Paginator_page_size_3,
-                          Paginator_page_size_4)
 from .filters import TitleFilter
+from .paginations import (PaginatorPageSize2, PaginatorPageSize3,
+                          PaginatorPageSize4)
+from .permissions import (AdminOnlyPermission, AdminOrReadOnlyPermission,
+                          IsOwnerOrReadOnlyOrOfficial)
+from .serializers import (CategorySerializer, CommentSerializer,
+                          ForNotAdminSerializer, GenreSerializer,
+                          ReviewSerializer, SignUpSerializer,
+                          TitleReadSerializer, TitleWriteSerializer,
+                          TokenSerializer, UserSerializer)
 
 
 class UsersViewSet(viewsets.ModelViewSet):
     """Класс для обработки запросов GET и PATCH модели User"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    pagination_class = Paginator_page_size_4
+    pagination_class = PaginatorPageSize4
     permission_classes = (AdminOnlyPermission,)
 
     @action(
@@ -150,7 +143,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    pagination_class = Paginator_page_size_2
+    pagination_class = PaginatorPageSize2
     permission_classes = (AdminOrReadOnlyPermission,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
@@ -163,7 +156,7 @@ class GenreViewSet(mixins.CreateModelMixin,
                    viewsets.GenericViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    pagination_class = Paginator_page_size_2
+    pagination_class = PaginatorPageSize2
     permission_classes = (AdminOrReadOnlyPermission,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
@@ -174,7 +167,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all().annotate(rating=Cast(Avg('reviews__score'),
                                             output_field=IntegerField()))
     permission_classes = (AdminOrReadOnlyPermission,)
-    pagination_class = Paginator_page_size_2
+    pagination_class = PaginatorPageSize2
     filter_backends = (filters1.DjangoFilterBackend,)
     filter_class = TitleFilter
 
@@ -190,7 +183,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnlyOrOfficial)
-    pagination_class = Paginator_page_size_3
+    pagination_class = PaginatorPageSize3
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -204,7 +197,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    pagination_class = Paginator_page_size_4
+    pagination_class = PaginatorPageSize4
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnlyOrOfficial)

@@ -1,7 +1,9 @@
-from ...models import User, Title, Genre, GenreTitle, Category, Review, Comment
-from django.core.management.base import BaseCommand
 import csv
 import os
+
+from django.core.management.base import BaseCommand
+
+from ...models import Category, Comment, Genre, GenreTitle, Review, Title, User
 
 
 def get_csv_folder_path():
