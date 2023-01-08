@@ -54,7 +54,6 @@ jobs:
         with:
           push: true
           tags: frqhero/api_yamdb:latest
-          with:
           script: |
             cd api_yamdb/
   deploy:
