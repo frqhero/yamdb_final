@@ -18,8 +18,8 @@ services:
       - media_value:/app/api_yamdb/media/
     depends_on:
       - db
-    env_file:
-      - ./.env
+#    env_file:
+#      - ./.env
     tty: true
   nginx:
     image: nginx:1.21.3-alpine
