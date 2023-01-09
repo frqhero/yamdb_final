@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - ./.env
     tty: true
   nginx:
     image: nginx:1.21.3-alpine
