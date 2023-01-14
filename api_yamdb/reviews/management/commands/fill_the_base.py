@@ -10,7 +10,7 @@ def get_csv_folder_path():
     sought_module_path = os.path.dirname(__file__)
     for _ in range(3):
         sought_module_path = os.path.dirname(sought_module_path)
-    return os.path.join(sought_module_path, 'static/data')
+    return os.path.join(sought_module_path, 'staticc/data')
 
 
 csvs_folderpath = get_csv_folder_path()
